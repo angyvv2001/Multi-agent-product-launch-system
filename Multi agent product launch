@@ -1,0 +1,100 @@
+Here's a more detailed implementation of the multi-agent system for product launch decision:
+
+agents.py
+class PM_Agent:
+    def __call__(self, inputs):
+        # Define success criteria and go/no-go framing
+        return {"success_criteria": "Crash rate < 1%", "go_no_go": "Proceed"}
+
+class Data_Analyst_Agent:
+    def __call__(self, inputs):
+        # Analyze metrics and trends
+        metrics = inputs["metrics"]
+        crash_rate = metrics["crash_rate"]
+        if crash_rate > 0.01:
+            return {"analysis": "High crash rate", "recommendation": "Pause, "confidence": 0.6}
+        else:
+            return {"analysis": "Crash rate okay", "recommendation": "Proceed", "confidence": 0.8}
+
+class Marketing_Agent:
+    def __call__(self, inputs):
+                                                  
+        feedback = inputs["__call__(self, inputs):
+        # Assess messaging and customer perception
+        feedback = inputs["feedback"]
+        sentiment = [f["sentiment"] for f in feedback]
+        if "negative" in sentiment:
+            return {"messaging": "Highlight fixes", "perception": "Mixed", "confidence": 0.5}
+        else:
+            return {"messaging": "Promote feature", "perception": "Positive", "confidence": 0.8}
+
+class Risk_Agent:
+    def __call__(self, inputs):
+                                                   
+        analysis = inputs["__call__(self, inputs):
+        # Challenge assumptions and highlight risks
+        analysis = inputs["analysis"]
+        if "high" in analysis.lower():
+            return {"risks": ["High crash risk"], "mitigation": "Fix bugs ASAP"}
+        else:
+            return {"risks": [], "mitigation": "Monitor metrics"}
+main.py
+import json
+from langgraph import Graph
+from agents import PM_Agent, Data_Analyst_Agent, Marketing_Agent, Risk_Agent
+
+Define agents
+pm_agent = PM_Agent()
+data_agent = Data_Analyst_Agent()
+marketing_agent = Marketing_Agent()
+risk_agent = Risk_Agent()
+
+Define graph
+graph = Graph()
+graph.add_node(pm_agent)
+graph.add_node(data_agent)
+graph.add_node(marketing_agent)
+graph.add_node(risk_agent)
+
+graph.add_edge(pm_agent, data_agent)
+graph.add_edge(data_agent, marketing_agent)
+graph.add_edge(marketing_agent, risk_agent)
+
+Compile graph
+compiled_graph = graph.compile()
+
+Inputs
+inputs = {
+    "metrics": {
+        "activation": 0.02,
+        "dau_wau": -0.015,
+        "retention": {"D1": 0.8, "D7": 0.5},
+        "crash_rate": 0.005,
+        "api_latency": 200,
+        "payment_success": 0.95,
+        "support_tickets": 0.1,
+        "funnel_completion": 0.3,
+        "churn": 0.01
+    },
+    "feedback": [
+        {"sentiment": "positive", "text": "Love the new feature!"},
+        {"sentiment": "neutral", "text": "It's okay, needs improvement"},
+        {"sentiment": "negative", "text": "Crashes every time I use it"}
+    ]
+}
+
+Run graph
+output = compiled_graph.run(inputs)
+
+Structured output
+result = {
+    "decision": "Pause" if output["recommendation"] == "Pause" else "Proceed",
+    "rationale": output["analysis"],
+    "risk_register": output["risks"],
+    "action_plan": [{"action": output["mitigation"], "owner": "Engineering", "timeframe": "24h"}],
+    "communication_plan": output["messaging"],
+    "confidence_score": output["confidence"]
+}
+
+print(json.dumps(result, indent=2))
+This implementation defines four agents: PM, Data Analyst, Marketing, and Risk. Each agent performs a specific task and passes its output to the next agent. The final output is a structured decision with rationale, risks, action plan, communication plan, and confidence score.
